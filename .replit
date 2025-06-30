@@ -1,0 +1,28 @@
+
+language = "nodejs"
+entrypoint = "index.html"
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-24_11"
+
+[deployment]
+deploymentTarget = "cloudrun"
+run = ["sh", "-c", "cd utils && node node-server.js"]
+build = ["sh", "-c", "npm install --prefix utils"]
+
+[workflows]
+runButton = "Start server"
+
+[[workflows.workflow]]
+name = "Start server"
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm start"
+waitForPort = 80
+
+[[ports]]
+localPort = 80
+externalPort = 80
